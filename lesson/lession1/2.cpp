@@ -9,7 +9,8 @@ class account {
     string theName;
     long long theBalance;
 public:
-//constructor
+//constructor (hàm để khởi tạo đối tượng)
+//có thể kiểm tra, mở rộng về sau ở hmaf set
 account(string theID, string theName, float theBalance){
     this->setName(theName);
     this->setID(theID);

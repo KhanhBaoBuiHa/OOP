@@ -49,7 +49,7 @@ public:
 };
 class Library {
     string name;
-    list<Book*> stock;
+    list<Book*> stock; // Một danh sách các con trỏ trỏ tới các đối tượng Book.
 public:
     // Constructor
     Library(string name){
@@ -63,9 +63,10 @@ public:
         return this->name;
     }
     // Add one book
-    void addOneBook(Book* book){
-        this->stock.push_back(book);
+    void addOneBook(Book* book){ //hàm này giúp thêm 1 cuốn sách vào ds stock 
+        this->stock.push_back(book); //push_backhàm thêm phần tử vào cuối danh sách.
     }
+    //hàm trả toàn bộ danh sách dưới dạng list <Book*>
     list <Book*> getBooks(){
         return stock;
     }

@@ -1,59 +1,113 @@
 #include <iostream>
-#include <set>
+#include <string>
 #include <vector>
-#include <algorithm>
+
 using namespace std;
 
-int main() {
-    vector<pair<int, int>> points(4);
-    set<pair<int, int>> uniquePoints;
+class Car {
+    string registrationNumber, brand;
+    bool isRented;
 
-    for (int i = 0; i < 4; ++i) {
-        cin >> points[i].first >> points[i].second;
-        uniquePoints.insert(points[i]);
+public:
+    // Constructor
+    Car(string registrationNumber, string brand) {
+        this->registrationNumber = registrationNumber;
+        this->brand = brand;
+        this->isRented = false;
     }
 
-    // Kiểm tra trùng điểm
-    if (uniquePoints.size() < 4) {
-        cout << -1 << endl;
-        return 0;
+    // Setters
+    void setRegistrationNumber(string reg) { registrationNumber = reg; }
+    void setBrand(string b) { brand = b; }
+    void setIsRented(bool status) { isRented = status; }
+
+    // Getters
+    string getRegistrationNumber() { return registrationNumber; }
+    string getBrand() { return brand; }
+    bool getIsRented() { return isRented; }
+
+    void display() {
+        cout << "- " << brand << " [" << registrationNumber << "]" << (isRented ? " (Rented)" : "") << endl;
+    }
+};
+
+class Customer {
+    string name, id;
+    vector<Car*> rentedCars;
+
+public:
+    // Constructor
+    Customer(string name, string id) {
+        this->name = name;
+        this->id = id;
     }
 
-    set<int> xs, ys;
-    for (auto p : points) {
-        xs.insert(p.first);
-        ys.insert(p.second);
-    }
+    // Setters
+    void setName(string name) { this->name = name; }
+    void setID(string id) { this->id = id; }
 
-    // Phải có đúng 2 x khác nhau và 2 y khác nhau
-    if (xs.size() != 2 || ys.size() != 2) {
-        cout << "NO" << endl;
-        return 0;
-    }
+    // Getters
+    string getName() { return name; }
+    string getID() { return id; }
 
-    // Lấy ra 2 giá trị x và y
-    vector<int> x_vals(xs.begin(), xs.end());
-    vector<int> y_vals(ys.begin(), ys.end());
-
-    // Tạo tập hợp 4 điểm cần có nếu là hình vuông
-    set<pair<int, int>> squareCorners = {
-        {x_vals[0], y_vals[0]},
-        {x_vals[0], y_vals[1]},
-        {x_vals[1], y_vals[0]},
-        {x_vals[1], y_vals[1]}
-    };
-
-    // So sánh tập điểm
-    if (uniquePoints == squareCorners) {
-        // Kiểm tra chiều dài cạnh phải bằng nhau
-        if (abs(x_vals[0] - x_vals[1]) == abs(y_vals[0] - y_vals[1])) {
-            cout << "YES" << endl;
+    // Rent a car
+    void rentCar(Car* car) {
+        if (!car->getIsRented()) {
+            rentedCars.push_back(car);
+            car->setIsRented(true);
         } else {
-            cout << "NO" << endl;
+            cout << "Car " << car->getRegistrationNumber() << " is already rented.\n";
         }
-    } else {
-        cout << "NO" << endl;
     }
+
+    // Return a car
+    void returnCar(Car* car) {
+        for (auto it = rentedCars.begin(); it != rentedCars.end(); ++it) {
+            if (*it == car) {
+                car->setIsRented(false);
+                rentedCars.erase(it);
+                return;
+            }
+        }
+    }
+
+    // Display
+    void display() {
+        cout << "\nCustomer: " << name << " (ID: " << id << ")" << endl;
+        cout << "Rented Cars:" << endl;
+        if (rentedCars.empty()) {
+            cout << "  No cars rented." << endl;
+        } else {
+            for (Car* car : rentedCars) {
+                car->display();
+            }
+        }
+    }
+};
+
+int main() {
+    // Create 2 customers
+    Customer customer1("Nguyen Van A", "123");
+    Customer customer2("Nguyen Van B", "456");
+
+    // Create 3 cars
+    Car car1("ABC", "Toyota");
+    Car car2("DEF", "Honda");
+    Car car3("GHI", "Lead");
+
+    // Cho khách hàng 1 thuê 2 xe đầu
+    customer1.rentCar(&car1);
+    customer1.rentCar(&car2);
+
+    // Khách hàng 2 thuê xe 3
+    customer2.rentCar(&car3);
+
+    // Khách hàng 1 trả xe 2, khách hàng 2 thuê xe đó
+    customer1.returnCar(&car2);
+    customer2.rentCar(&car2);
+
+    // Hiển thị thông tin khách hàng 2 và các xe đang mượn
+    customer2.display();
 
     return 0;
 }

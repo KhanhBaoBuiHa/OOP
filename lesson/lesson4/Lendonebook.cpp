@@ -6,6 +6,8 @@ using namespace std;
 
 class BorrowerRecord;
 class Library;
+class Book;
+
 //Class Book
 class Book {
     // attributes: number, author, title
@@ -68,7 +70,10 @@ class BorrowerRecord {
 public:
     BorrowerRecord(string name) : borrowerName(name) {}
 
-    string getName() { return borrowerName; }
+    string getName() { 
+        return borrowerName; 
+    }
+
     void attachBook(Book* book) {
         borrowedBooks.push_back(book);
         book->attachBorrower(this);
@@ -92,7 +97,7 @@ public:
 class Library {
     string name;
     list<Book*> stock;
-    list<BorrowerRecord*> borrower;
+    list<BorrowerRecord*> borrowerList;
 public:
     // Constructor
     Library(string name){
@@ -109,13 +114,19 @@ public:
     void addOneBook(Book* book){
         this->stock.push_back(book);
     }
+
+    void registerOneBorrower(string name) {
+        borrowerList.push_back(new BorrowerRecord(name));
+    }
+
+    /*
     list <Book*> getBooks(){
         return stock;
     }
+    */
+
     // Display
-    void display(){
-        cout<<"name: "<<this->getName()<<endl;
-    }
+
     //displayBookAvailableForLoan()
     void displayBookAvailableForLoan(){
         cout<<"Books available for loan: "<<endl;
@@ -147,24 +158,29 @@ public:
         }
         cout << "Book not found." << endl;
     }
-    // Destructor
-    ~Library(){}
-};
-void Library::returnOneBook(string catalougeNumber){
-    for (Book* book : stock){
-        if (book->getNumber() == catalougeNumber) {
-            if (book->getBorrower() != nullptr) {
-                book->detachBorrower();
-                cout << "Book returned." << endl;
-            } else {
-                cout << "Book is not on loan." << endl;
+
+    void returnOneBook(string catalougeNumber){
+        for (Book* book : stock){
+            if (book->getNumber() == catalougeNumber) {
+                if (book->getBorrower() != nullptr) {
+                    book->detachBorrower();
+                    cout << "Book returned." << endl;
+                } else {
+                    cout << "Book is not on loan." << endl;
+                }
+                return;
             }
-            return;
         }
     }
+
+    ~Library() {
+        for (Book* b : stock) delete b;
+        for (BorrowerRecord* br : borrowerList) delete br;
+    }
 };
+
 int main(){
-    Library lib;
+    Library lib("My Library");
     cout <<"The Library Application\n" << endl;
     Book* first = new Book("000","Aso Haro", "Alice in Borderland");
     Book *second = new Book("001","Ha Van Thao" , "co so lap trinh huong doi tuong");

@@ -121,12 +121,12 @@ int main() {
     cout<<"Houses 's information"<<endl;
     h1.display();
     h2.display();
-    
+    /*
     delete h1;
     delete h2;
     delete p1;
     delete p2;
     delete p3;
-
+    */
     return 0;
 }

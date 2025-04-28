@@ -92,12 +92,12 @@ public:
     ~Library(){}
 };
 
-class BorrowRecord {
+class BorrowerRecord {
     string theName;
     list<Book*> books;
 public:
     //constructor
-    BorrowRecord(string name){
+    BorrowerRecord(string name){
         this->setName(name);
     }
     //Access Method
@@ -171,7 +171,7 @@ int main(){
     secondLib.addOneBook(first);
     secondLib.addOneBook(&second);
 
-    BorrowRecord* firstBorrow = new BorrowRecord("Nguyen Van A");
+    BorrowerRecord* firstBorrow = new BorrowerRecord("Nguyen Van A");
     firstBorrow->display();
 
     firstBorrow->attachBook(first);
