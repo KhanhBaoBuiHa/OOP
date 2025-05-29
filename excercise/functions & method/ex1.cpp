@@ -27,12 +27,16 @@ void setCapacity(int Capacity){
 }
 
 string getMake(){
-    return this->
+    return this->theMake;
 }
 
-string getModel() { ... }
+string getModel(){
+    return this->theModel;
+}
+int getCapacity(){
+    return this->theCapacity;
+}
 
-int getCapacity() { ... }
 
 };
 int  main(){
