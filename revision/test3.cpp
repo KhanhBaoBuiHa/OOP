@@ -69,7 +69,8 @@ class cart
         vector<product*> products;
     public:
         void addProduct(product* item, int quantity ){
-            this->products.push_back(item)*quantity;
+            if(quantity <= 0 ) return;
+            if(items.cout(item
         }
         void removeProduct(product* item){
             auto it = find(products.begin(), products.end(), item);
